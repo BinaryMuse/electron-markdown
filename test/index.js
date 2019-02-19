@@ -9,6 +9,7 @@ const fixtures = {
   basic: fs.readFileSync(path.join(__dirname, 'fixtures', 'basic.md'), 'utf8'),
   emoji: fs.readFileSync(path.join(__dirname, 'fixtures', 'emoji.md'), 'utf8'),
   code: fs.readFileSync(path.join(__dirname, 'fixtures', 'code.md'), 'utf8'),
+  unsafe: fs.readFileSync(path.join(__dirname, 'fixtures', 'unsafe.md'), 'utf8'),
 }
 
 describe('markdownToHtml', () => {
@@ -46,5 +47,12 @@ describe('markdownToHtml', () => {
     content = await markdownToHtml(fixtures.code)
     $ = cheerio.load(content)
     expect($('pre code.hljs').length).to.eql(1)
+  })
+
+  it('allows additional cmark options', async () => {
+    content = await markdownToHtml(fixtures.unsafe)
+    expect(content).not.to.include('img')
+    content = await markdownToHtml(fixtures.unsafe, { unsafe: true })
+    expect(content).to.include('img')
   })
 })

@@ -14,11 +14,12 @@ function createProcessor () {
     .use(highlight)
 }
 
-module.exports = function markdownToHtml (markdown) {
-  return cmark.renderHtml(markdown, {
+module.exports = function markdownToHtml (markdown, cmarkOptions) {
+  const opts = Object.assign({}, cmarkOptions || {}, {
     footnotes: true,
     extensions: ['table', 'strikethrough', 'tagfilter', 'autolink']
-  }).then(function (html) {
+  })
+  return cmark.renderHtml(markdown, opts).then(function (html) {
     return new Promise((resolve, reject) => {
       createProcessor().process(html, function (err, file) {
         if (err) {
