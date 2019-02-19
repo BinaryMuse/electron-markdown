@@ -13,7 +13,7 @@ node_js:
   - 10
 
 install:
-  - npm ci
+  - npm ci || npm install
 
 script:
   - npm test
