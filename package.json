@@ -1,6 +1,6 @@
 {
   "name": "electron-markdown",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Convert GitHub-flavored Markdown to HTML with a few extras",
   "main": "index.js",
   "scripts": {
