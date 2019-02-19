@@ -4,6 +4,8 @@ electron-markdown is a Node.js module to convert Markdown to HTML. It uses [cmar
 
 ## Installation
 
+Supports Node.js v8 or higher.
+
 ```bash
 npm install electron-markdown
 ```
