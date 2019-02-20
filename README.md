@@ -18,7 +18,7 @@ electron-markdown exports a single function, which takes a Markdown string as it
 
 * `result: Promise<String>` - a Promise resolving to the resulting HTML if parsing and rendering succeeds
 * `markdown: String` - a string of Markdown to render to HTML
-* `options: Object`
+* `options: Object` - an optional object specifying options:
   * `includeExtensions: Array<String>` - an array of additional [cmark extension names](https://github.com/BinaryMuse/node-cmark-gfm#extensions) to load while rendering.
   * `excludeExtensions: Array<String>` - an array of cmark extension names to *exclude* while rendering
   * anything else: any other option will be passed directly to [`cmark-gfm`'s options](https://github.com/BinaryMuse/node-cmark-gfm#options)
