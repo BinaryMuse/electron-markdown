@@ -14,20 +14,43 @@ function createProcessor () {
     .use(highlight)
 }
 
-module.exports = function markdownToHtml (markdown, cmarkOptions) {
-  const opts = Object.assign({}, cmarkOptions || {}, {
-    footnotes: true,
-    extensions: ['table', 'strikethrough', 'tagfilter', 'autolink']
+function callbackResolve (fn) {
+  return new Promise((resolve, reject) => {
+    const callback = (err, val) => {
+      if (err) return reject(err)
+      return resolve(val)
+    }
+    fn(callback)
   })
-  return cmark.renderHtml(markdown, opts).then(function (html) {
-    return new Promise((resolve, reject) => {
-      createProcessor().process(html, function (err, file) {
-        if (err) {
-          return reject(err)
-        }
+}
 
-        resolve(file.contents)
-      })
+module.exports = async function markdownToHtml (markdown, cmarkOptions) {
+  cmarkOptions = cmarkOptions || {}
+  const extensions = ['table', 'strikethrough', 'autolink', 'tagfilter']
+
+  if (cmarkOptions.includeExtensions) {
+    cmarkOptions.includeExtensions.forEach(ext => {
+      if (!extensions.includes(ext)) {
+        extensions.push(ext)
+      }
     })
-  })
+  }
+
+  if (cmarkOptions.excludeExtensions) {
+    cmarkOptions.excludeExtensions.forEach(ext => {
+      if (extensions.includes(ext)) {
+        const index = extensions.indexOf(ext)
+        extensions.splice(index, 1)
+      }
+    })
+  }
+
+  const opts = Object.assign({
+    footnotes: true,
+    extensions: extensions
+  }, cmarkOptions)
+
+  const html = await cmark.renderHtml(markdown, opts)
+  const { contents } = await callbackResolve(cb => createProcessor().process(html, cb))
+  return contents
 }
