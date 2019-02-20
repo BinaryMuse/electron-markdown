@@ -38,20 +38,21 @@ function createProcessor () {
 }
 
 module.exports = async function markdownToHtml (markdown, options = {}) {
+  const { includeExtensions, excludeExtensions, ...others } = options
   const extensions = ['table', 'strikethrough', 'autolink', 'tagfilter']
 
-  if (options.includeExtensions) {
-    options.includeExtensions.forEach(addToArray.bind(null, extensions))
+  if (includeExtensions) {
+    includeExtensions.forEach(addToArray.bind(null, extensions))
   }
 
-  if (options.excludeExtensions) {
-    options.excludeExtensions.forEach(removeFromArray.bind(null, extensions))
+  if (excludeExtensions) {
+    excludeExtensions.forEach(removeFromArray.bind(null, extensions))
   }
 
   const cmarkOpts = Object.assign({
     footnotes: true,
     extensions: extensions
-  }, options)
+  }, others)
 
   const html = await cmark.renderHtml(markdown, cmarkOpts)
   const { contents } = await callbackResolve(cb => createProcessor().process(html, cb))
