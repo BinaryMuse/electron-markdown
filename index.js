@@ -5,15 +5,6 @@ const highlight = require('rehype-highlight')
 const slug = require('rehype-slug')
 const gemojiToEmoji = require('remark-gemoji-to-emoji')
 
-function createProcessor () {
-  return rehype()
-    .data('settings', { fragment: true })
-    .use(gemojiToEmoji)
-    .use(slug)
-    .use(autolinkHeadings, { behavior: 'wrap' })
-    .use(highlight)
-}
-
 function callbackResolve (fn) {
   return new Promise((resolve, reject) => {
     const callback = (err, val) => {
@@ -24,33 +15,45 @@ function callbackResolve (fn) {
   })
 }
 
-module.exports = async function markdownToHtml (markdown, cmarkOptions) {
-  cmarkOptions = cmarkOptions || {}
+function addToArray (arr, value) {
+  if (!arr.includes(value)) {
+    arr.push(value)
+  }
+}
+
+function removeFromArray (arr, value) {
+  if (arr.includes(value)) {
+    const index = arr.indexOf(value)
+    arr.splice(index, 1)
+  }
+}
+
+function createProcessor () {
+  return rehype()
+    .data('settings', { fragment: true })
+    .use(gemojiToEmoji)
+    .use(slug)
+    .use(autolinkHeadings, { behavior: 'wrap' })
+    .use(highlight)
+}
+
+module.exports = async function markdownToHtml (markdown, options = {}) {
   const extensions = ['table', 'strikethrough', 'autolink', 'tagfilter']
 
-  if (cmarkOptions.includeExtensions) {
-    cmarkOptions.includeExtensions.forEach(ext => {
-      if (!extensions.includes(ext)) {
-        extensions.push(ext)
-      }
-    })
+  if (options.includeExtensions) {
+    options.includeExtensions.forEach(addToArray.bind(null, extensions))
   }
 
-  if (cmarkOptions.excludeExtensions) {
-    cmarkOptions.excludeExtensions.forEach(ext => {
-      if (extensions.includes(ext)) {
-        const index = extensions.indexOf(ext)
-        extensions.splice(index, 1)
-      }
-    })
+  if (options.excludeExtensions) {
+    options.excludeExtensions.forEach(removeFromArray.bind(null, extensions))
   }
 
-  const opts = Object.assign({
+  const cmarkOpts = Object.assign({
     footnotes: true,
     extensions: extensions
-  }, cmarkOptions)
+  }, options)
 
-  const html = await cmark.renderHtml(markdown, opts)
+  const html = await cmark.renderHtml(markdown, cmarkOpts)
   const { contents } = await callbackResolve(cb => createProcessor().process(html, cb))
   return contents
 }
