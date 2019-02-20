@@ -10,6 +10,8 @@ const fixtures = {
   emoji: fs.readFileSync(path.join(__dirname, 'fixtures', 'emoji.md'), 'utf8'),
   code: fs.readFileSync(path.join(__dirname, 'fixtures', 'code.md'), 'utf8'),
   unsafe: fs.readFileSync(path.join(__dirname, 'fixtures', 'unsafe.md'), 'utf8'),
+  table: fs.readFileSync(path.join(__dirname, 'fixtures', 'table.md'), 'utf8'),
+  tasklist: fs.readFileSync(path.join(__dirname, 'fixtures', 'tasklist.md'), 'utf8'),
 }
 
 describe('markdownToHtml', () => {
@@ -49,10 +51,26 @@ describe('markdownToHtml', () => {
     expect($('pre code.hljs').length).to.eql(1)
   })
 
-  it('allows additional cmark options', async () => {
-    content = await markdownToHtml(fixtures.unsafe)
-    expect(content).not.to.include('img')
-    content = await markdownToHtml(fixtures.unsafe, { unsafe: true })
-    expect(content).to.include('img')
+  describe('options', () => {
+    it('allows additional cmark options', async () => {
+      content = await markdownToHtml(fixtures.unsafe)
+      expect(content).not.to.include('img')
+      content = await markdownToHtml(fixtures.unsafe, { unsafe: true })
+      expect(content).to.include('img')
+    })
+
+    it('allows removing extensions', async () => {
+      content = await markdownToHtml(fixtures.table)
+      expect(content).to.include('table')
+      content = await markdownToHtml(fixtures.table, { excludeExtensions: ['table'] })
+      expect(content).not.to.include('table')
+    })
+
+    it('allows adding extensions', async () => {
+      content = await markdownToHtml(fixtures.tasklist)
+      expect(content).not.to.include('checkbox')
+      content = await markdownToHtml(fixtures.tasklist, { includeExtensions: ['tasklist'] })
+      expect(content).to.include('checkbox')
+    })
   })
 })
