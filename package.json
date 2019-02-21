@@ -15,7 +15,8 @@
   "author": "Michelle Tilley <michelle@michelletilley.net>",
   "license": "MIT",
   "dependencies": {
-    "cmark-gfm": "^0.4.1",
+    "cmark-gfm": "^0.5.1",
+    "mixin-deep": "^2.0.0",
     "rehype": "^7.0.0",
     "rehype-autolink-headings": "^2.0.4",
     "rehype-highlight": "^2.2.1",
