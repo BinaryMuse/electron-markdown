@@ -4,6 +4,7 @@ const autolinkHeadings = require('rehype-autolink-headings')
 const highlight = require('rehype-highlight')
 const slug = require('rehype-slug')
 const gemojiToEmoji = require('remark-gemoji-to-emoji')
+const mixin = require('mixin-deep')
 
 function callbackResolve (fn) {
   return new Promise((resolve, reject) => {
@@ -13,19 +14,6 @@ function callbackResolve (fn) {
     }
     fn(callback)
   })
-}
-
-function addToArray (arr, value) {
-  if (!arr.includes(value)) {
-    arr.push(value)
-  }
-}
-
-function removeFromArray (arr, value) {
-  if (arr.includes(value)) {
-    const index = arr.indexOf(value)
-    arr.splice(index, 1)
-  }
 }
 
 function createProcessor () {
@@ -38,23 +26,17 @@ function createProcessor () {
 }
 
 module.exports = async function markdownToHtml (markdown, options = {}) {
-  const { includeExtensions, excludeExtensions, ...others } = options
-  const extensions = ['table', 'strikethrough', 'autolink', 'tagfilter']
-
-  if (includeExtensions) {
-    includeExtensions.forEach(addToArray.bind(null, extensions))
-  }
-
-  if (excludeExtensions) {
-    excludeExtensions.forEach(removeFromArray.bind(null, extensions))
-  }
-
-  const cmarkOpts = Object.assign({
+  const defaultOpts = {
     footnotes: true,
-    extensions: extensions
-  }, others)
+    extensions: {
+      table: true,
+      strikethrough: true,
+      autolink: true,
+      tagfilter: true
+    }
+  }
 
-  const html = await cmark.renderHtml(markdown, cmarkOpts)
+  const html = await cmark.renderHtml(markdown, mixin(defaultOpts, options))
   const { contents } = await callbackResolve(cb => createProcessor().process(html, cb))
   return contents
 }
