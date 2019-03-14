@@ -22,7 +22,12 @@ function createProcessor () {
     .use(gemojiToEmoji)
     .use(slug)
     .use(autolinkHeadings, { behavior: 'wrap' })
-    .use(highlight)
+    .use(highlight, {
+      ignoreMissing: true,
+      aliases: {
+        'plaintext': ['text']
+      }
+    })
 }
 
 module.exports = async function markdownToHtml (markdown, options = {}) {
