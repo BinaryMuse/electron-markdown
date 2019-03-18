@@ -6,16 +6,6 @@ const slug = require('rehype-slug')
 const gemojiToEmoji = require('remark-gemoji-to-emoji')
 const mixin = require('mixin-deep')
 
-function callbackResolve (fn) {
-  return new Promise((resolve, reject) => {
-    const callback = (err, val) => {
-      if (err) return reject(err)
-      return resolve(val)
-    }
-    fn(callback)
-  })
-}
-
 function createProcessor () {
   return rehype()
     .data('settings', { fragment: true })
@@ -42,6 +32,6 @@ module.exports = async function markdownToHtml (markdown, options = {}) {
   }
 
   const html = await cmark.renderHtml(markdown, mixin(defaultOpts, options))
-  const { contents } = await callbackResolve(cb => createProcessor().process(html, cb))
+  const { contents } = await createProcessor().process(html)
   return contents
 }
