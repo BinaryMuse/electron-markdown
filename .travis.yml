@@ -1,15 +1,13 @@
 os:
   - linux
   - osx
-dist: trusty
-sudo: false
 
 language: node_js
 
 node_js:
-  - node
-  - 8
   - 10
+  - 12
+  - 14
 
 install:
   - npm ci
