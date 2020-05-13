@@ -21,7 +21,7 @@ function createProcessor () {
 }
 
 module.exports = async function markdownToHtml (markdown, options = {}) {
-  const defaultOpts = {
+  const cmarkDefaultOpts = {
     footnotes: true,
     extensions: {
       table: true,
@@ -31,7 +31,7 @@ module.exports = async function markdownToHtml (markdown, options = {}) {
     }
   }
 
-  const html = await cmark.renderHtml(markdown, mixin(defaultOpts, options))
+  const html = await cmark.renderHtml(markdown, mixin(cmarkDefaultOpts, options.cmark))
   const { contents } = await createProcessor().process(html)
   return contents
 }
