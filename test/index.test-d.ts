@@ -24,5 +24,5 @@ markdown('somethings', {
     fullInfoString: true,
     githubPreLang: false,
     unsafe: true,
-  }
+  },
 })

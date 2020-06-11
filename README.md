@@ -1,6 +1,9 @@
 # electron-markdown
 
-electron-markdown is a Node.js module to convert Markdown to HTML. It uses [cmark-gfm](https://www.npmjs.com/package/cmark-gfm) for HTML generation, and a series of [unified](https://github.com/unifiedjs/unified) plugins to process the resulting HTML.
+electron-markdown is a Node.js module to convert Markdown to HTML. It uses
+[cmark-gfm](https://www.npmjs.com/package/cmark-gfm) for HTML generation, and a
+series of [unified](https://github.com/unifiedjs/unified) plugins to process the
+resulting HTML.
 
 ## Installation
 
@@ -12,14 +15,19 @@ npm install electron-markdown
 
 ## Usage
 
-electron-markdown exports a single function, which takes a Markdown string as its first argument and an options object as its second argument, and returns a Promise that resolves to the resulting HTML.
+electron-markdown exports a single function, which takes a Markdown string as
+its first argument and an options object as its second argument, and returns a
+Promise that resolves to the resulting HTML.
 
 `resultPromise = electronMarkdown(markdown[, options])`
 
-- `result: Promise<String>` - a Promise resolving to the resulting HTML if parsing and rendering succeeds
+- `result: Promise<String>` - a Promise resolving to the resulting HTML if
+  parsing and rendering succeeds
 - `markdown: String` - a string of Markdown to render to HTML
 - `options: Object`
-  - `cmark` options to pass to [cmark-gfm](https://github.com/BinaryMuse/node-cmark-gfm#options); will be deeply merged with the default options
+  - `cmark` options to pass to
+    [cmark-gfm](https://github.com/BinaryMuse/node-cmark-gfm#options); will be
+    deeply merged with the default options
 
 Default options:
 
@@ -37,17 +45,20 @@ Default options:
 }
 ```
 
-To disable an option or extension that is enabled by default, provide your own options with a value of `false` (or an `extensions` object with the given extension's value set to `false`). Any options you provide will be merged into the default options, with `false` values overriding any default `true` value.
+To disable an option or extension that is enabled by default, provide your own
+options with a value of `false` (or an `extensions` object with the given
+extension's value set to `false`). Any options you provide will be merged into
+the default options, with `false` values overriding any default `true` value.
 
 ```javascript
-const markdownToHtml = require("electron-markdown");
+const markdownToHtml = require('electron-markdown')
 
 markdownToHtml(someMarkdown).then(
   function (html) {
-    console.log(html);
+    console.log(html)
   },
   function (err) {
-    console.error(err);
+    console.error(err)
   }
-);
+)
 ```

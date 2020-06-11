@@ -9,9 +9,15 @@ const fixtures = {
   basic: fs.readFileSync(path.join(__dirname, 'fixtures', 'basic.md'), 'utf8'),
   emoji: fs.readFileSync(path.join(__dirname, 'fixtures', 'emoji.md'), 'utf8'),
   code: fs.readFileSync(path.join(__dirname, 'fixtures', 'code.md'), 'utf8'),
-  unsafe: fs.readFileSync(path.join(__dirname, 'fixtures', 'unsafe.md'), 'utf8'),
+  unsafe: fs.readFileSync(
+    path.join(__dirname, 'fixtures', 'unsafe.md'),
+    'utf8'
+  ),
   table: fs.readFileSync(path.join(__dirname, 'fixtures', 'table.md'), 'utf8'),
-  tasklist: fs.readFileSync(path.join(__dirname, 'fixtures', 'tasklist.md'), 'utf8'),
+  tasklist: fs.readFileSync(
+    path.join(__dirname, 'fixtures', 'tasklist.md'),
+    'utf8'
+  ),
 }
 
 describe('markdownToHtml', () => {
@@ -27,7 +33,9 @@ describe('markdownToHtml', () => {
   })
 
   it('turns headings into links', () => {
-    expect($('h2#basic-fixture a[href="#basic-fixture"]').text()).to.equal('Basic Fixture')
+    expect($('h2#basic-fixture a[href="#basic-fixture"]').text()).to.equal(
+      'Basic Fixture'
+    )
   })
 
   it('handles markdown links', () => {
@@ -55,14 +63,18 @@ describe('markdownToHtml', () => {
     it('allows additional cmark options', async () => {
       content = await markdownToHtml(fixtures.unsafe)
       expect(content).not.to.include('img')
-      content = await markdownToHtml(fixtures.unsafe, { cmark: { unsafe: true } })
+      content = await markdownToHtml(fixtures.unsafe, {
+        cmark: { unsafe: true },
+      })
       expect(content).to.include('img')
     })
 
     it('allows removing extensions', async () => {
       content = await markdownToHtml(fixtures.table)
       expect(content).to.include('table')
-      content = await markdownToHtml(fixtures.table, { cmark: { extensions: { table: false } } })
+      content = await markdownToHtml(fixtures.table, {
+        cmark: { extensions: { table: false } },
+      })
       expect(content).not.to.include('table')
     })
 
@@ -70,7 +82,9 @@ describe('markdownToHtml', () => {
       content = await markdownToHtml(fixtures.tasklist)
       expect(content).not.to.include('checkbox')
       expect(content).to.include('href')
-      content = await markdownToHtml(fixtures.tasklist, { cmark: { extensions: { tasklist: true, autolink: false } } })
+      content = await markdownToHtml(fixtures.tasklist, {
+        cmark: { extensions: { tasklist: true, autolink: false } },
+      })
       expect(content).to.include('checkbox')
       expect(content).not.to.include('href')
     })

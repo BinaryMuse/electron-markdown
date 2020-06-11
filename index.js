@@ -7,7 +7,7 @@ const gemojiToEmoji = require('remark-gemoji-to-emoji')
 const mixin = require('mixin-deep')
 const { isBigIntLiteral } = require('tsd/libraries/typescript')
 
-function createProcessor () {
+function createProcessor() {
   return rehype()
     .data('settings', { fragment: true })
     .use(gemojiToEmoji)
@@ -16,14 +16,16 @@ function createProcessor () {
     .use(highlight, {
       ignoreMissing: true,
       aliases: {
-        'plaintext': ['text']
-      }
+        plaintext: ['text'],
+      },
     })
 }
 
-module.exports = async function markdownToHtml (markdown, options = {}) {
+module.exports = async function markdownToHtml(markdown, options = {}) {
   if (Object.keys(options).length !== 0 && !options.cmark) {
-    console.warn('[electron-markdown] Passing cmark options is moved to options.cmark.')
+    console.warn(
+      '[electron-markdown] Passing cmark options is moved to options.cmark.'
+    )
     options.cmark = options
   }
 
@@ -33,11 +35,14 @@ module.exports = async function markdownToHtml (markdown, options = {}) {
       table: true,
       strikethrough: true,
       autolink: true,
-      tagfilter: true
-    }
+      tagfilter: true,
+    },
   }
 
-  const html = await cmark.renderHtml(markdown, mixin(cmarkDefaultOpts, options.cmark))
+  const html = await cmark.renderHtml(
+    markdown,
+    mixin(cmarkDefaultOpts, options.cmark)
+  )
   const { contents } = await createProcessor().process(html)
   return contents
 }
