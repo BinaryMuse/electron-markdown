@@ -5,7 +5,6 @@ const highlight = require('rehype-highlight')
 const slug = require('rehype-slug')
 const gemojiToEmoji = require('remark-gemoji-to-emoji')
 const mixin = require('mixin-deep')
-const { isBigIntLiteral } = require('tsd/libraries/typescript')
 
 function createProcessor() {
   return rehype()
