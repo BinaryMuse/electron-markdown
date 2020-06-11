@@ -4,6 +4,7 @@
   "description": "Convert GitHub-flavored Markdown to HTML with a few extras",
   "repository": "https://github.com/BinaryMuse/electron-markdown",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "lint": "prettier --check \"./**/*.{ts,js,yml}\"",
     "lint:fix": "yarn lint --write",

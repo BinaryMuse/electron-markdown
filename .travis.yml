@@ -4,6 +4,9 @@ os:
 
 language: node_js
 
+notifications:
+  email: false
+
 node_js:
   - 10
   - 12
