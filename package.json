@@ -5,7 +5,8 @@
   "repository": "https://github.com/BinaryMuse/electron-markdown",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha && npm run tsd",
+    "tsd": "tsd"
   },
   "keywords": [
     "markdown",
@@ -18,18 +19,23 @@
   },
   "author": "Michelle Tilley <michelle@michelletilley.net>",
   "license": "MIT",
+  "tsd": {
+    "directory": "test"
+  },
   "dependencies": {
-    "cmark-gfm": "^0.7.0",
+    "cmark-gfm": "^0.7.1",
     "mixin-deep": "^2.0.1",
-    "rehype": "^10.0.0",
+    "rehype": "^11.0.0",
     "rehype-autolink-headings": "^3.0.0",
     "rehype-highlight": "^4.0.0",
     "rehype-slug": "^3.0.0",
-    "remark-gemoji-to-emoji": "^1.1.0"
+    "remark-gemoji-to-emoji": "^1.1.0",
+    "tsd": "^0.11.0",
+    "typescript": "^3.9.5"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "cheerio": "^1.0.0-rc.3",
-    "mocha": "^7.1.2"
+    "mocha": "^8.0.1"
   }
 }
