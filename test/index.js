@@ -51,18 +51,18 @@ describe('markdownToHtml', () => {
     expect($('pre code.hljs').length).to.eql(1)
   })
 
-  describe('options', () => {
+  describe('options.cmark', () => {
     it('allows additional cmark options', async () => {
       content = await markdownToHtml(fixtures.unsafe)
       expect(content).not.to.include('img')
-      content = await markdownToHtml(fixtures.unsafe, { unsafe: true })
+      content = await markdownToHtml(fixtures.unsafe, { cmark: { unsafe: true } })
       expect(content).to.include('img')
     })
 
     it('allows removing extensions', async () => {
       content = await markdownToHtml(fixtures.table)
       expect(content).to.include('table')
-      content = await markdownToHtml(fixtures.table, { extensions: { table: false } })
+      content = await markdownToHtml(fixtures.table, { cmark: { extensions: { table: false } } })
       expect(content).not.to.include('table')
     })
 
@@ -70,9 +70,16 @@ describe('markdownToHtml', () => {
       content = await markdownToHtml(fixtures.tasklist)
       expect(content).not.to.include('checkbox')
       expect(content).to.include('href')
-      content = await markdownToHtml(fixtures.tasklist, { extensions: { tasklist: true, autolink: false } })
+      content = await markdownToHtml(fixtures.tasklist, { cmark: { extensions: { tasklist: true, autolink: false } } })
       expect(content).to.include('checkbox')
       expect(content).not.to.include('href')
+    })
+
+    it('allows use deprecated options object', async () => {
+      content = await markdownToHtml(fixtures.unsafe)
+      expect(content).not.to.include('img')
+      content = await markdownToHtml(fixtures.unsafe, { unsafe: true })
+      expect(content).to.include('img')
     })
   })
 })

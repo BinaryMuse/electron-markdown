@@ -5,6 +5,7 @@ const highlight = require('rehype-highlight')
 const slug = require('rehype-slug')
 const gemojiToEmoji = require('remark-gemoji-to-emoji')
 const mixin = require('mixin-deep')
+const { isBigIntLiteral } = require('tsd/libraries/typescript')
 
 function createProcessor () {
   return rehype()
@@ -21,7 +22,12 @@ function createProcessor () {
 }
 
 module.exports = async function markdownToHtml (markdown, options = {}) {
-  const defaultOpts = {
+  if (Object.keys(options).length !== 0 && !options.cmark) {
+    console.warn('[electron-markdown] Passing cmark options is moved to options.cmark.')
+    options.cmark = options
+  }
+
+  const cmarkDefaultOpts = {
     footnotes: true,
     extensions: {
       table: true,
@@ -31,7 +37,7 @@ module.exports = async function markdownToHtml (markdown, options = {}) {
     }
   }
 
-  const html = await cmark.renderHtml(markdown, mixin(defaultOpts, options))
+  const html = await cmark.renderHtml(markdown, mixin(cmarkDefaultOpts, options.cmark))
   const { contents } = await createProcessor().process(html)
   return contents
 }

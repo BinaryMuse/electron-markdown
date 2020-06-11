@@ -16,20 +16,23 @@ electron-markdown exports a single function, which takes a Markdown string as it
 
 `resultPromise = electronMarkdown(markdown[, options])`
 
-* `result: Promise<String>` - a Promise resolving to the resulting HTML if parsing and rendering succeeds
-* `markdown: String` - a string of Markdown to render to HTML
-* `options: Object` - options to pass to [cmark-gfm](https://github.com/BinaryMuse/node-cmark-gfm#options); will be deeply merged with the default options
+- `result: Promise<String>` - a Promise resolving to the resulting HTML if parsing and rendering succeeds
+- `markdown: String` - a string of Markdown to render to HTML
+- `options: Object`
+  - `cmark` options to pass to [cmark-gfm](https://github.com/BinaryMuse/node-cmark-gfm#options); will be deeply merged with the default options
 
 Default options:
 
 ```javascript
 {
-  footnotes: true,
-  extensions: {
-    table: true,
-    strikethrough: true,
-    autolink: true,
-    tagfilter: true
+  cmark: {
+    footnotes: true,
+    extensions: {
+      table: true,
+      strikethrough: true,
+      autolink: true,
+      tagfilter: true
+    }
   }
 }
 ```
@@ -37,12 +40,14 @@ Default options:
 To disable an option or extension that is enabled by default, provide your own options with a value of `false` (or an `extensions` object with the given extension's value set to `false`). Any options you provide will be merged into the default options, with `false` values overriding any default `true` value.
 
 ```javascript
-const markdownToHtml = require('electron-markdown')
+const markdownToHtml = require("electron-markdown");
 
-markdownToHtml(someMarkdown)
-  .then(function (html) {
-    console.log(html)
-  }, function (err) {
-    console.error(err)
-  })
+markdownToHtml(someMarkdown).then(
+  function (html) {
+    console.log(html);
+  },
+  function (err) {
+    console.error(err);
+  }
+);
 ```
