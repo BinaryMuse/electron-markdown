@@ -6,9 +6,12 @@ const slug = require('rehype-slug')
 const gemojiToEmoji = require('remark-gemoji-to-emoji')
 const mixin = require('mixin-deep')
 
-function createProcessor() {
+function createProcessor(processorOpts) {
+  const { runBefore } = processorOpts
+
   return rehype()
     .data('settings', { fragment: true })
+    .use(runBefore)
     .use(gemojiToEmoji)
     .use(slug)
     .use(autolinkHeadings, { behavior: 'wrap' })
@@ -21,11 +24,19 @@ function createProcessor() {
 }
 
 module.exports = async function markdownToHtml(markdown, options = {}) {
-  if (Object.keys(options).length !== 0 && !options.cmark) {
+  if (
+    Object.keys(options).length !== 0 &&
+    !options.runBefore &&
+    !options.cmark
+  ) {
     console.warn(
       '[electron-markdown] Passing cmark options is moved to options.cmark.'
     )
     options.cmark = options
+  }
+
+  const defaults = {
+    runBefore: [],
   }
 
   const cmarkDefaultOpts = {
@@ -37,11 +48,12 @@ module.exports = async function markdownToHtml(markdown, options = {}) {
       tagfilter: true,
     },
   }
+  options = Object.assign(defaults, options)
 
   const html = await cmark.renderHtml(
     markdown,
     mixin(cmarkDefaultOpts, options.cmark)
   )
-  const { contents } = await createProcessor().process(html)
+  const { contents } = await createProcessor(options).process(html)
   return contents
 }
