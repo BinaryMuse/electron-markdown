@@ -10,20 +10,16 @@ declare namespace markdown {
     readonly languages?: Record<string, Function>
   }
 
-  // @deprecated Passing cmark options is moved to `options.cmark`
-  interface IDeprecatedOptions extends Partial<cmark.IOptions> {
-    readonly highlight?: IHighlightOptions
-  }
   interface IOptions {
     readonly runBefore?: Array<any>
-    readonly cmark: Partial<cmark.IOptions>
+    readonly cmark?: Partial<cmark.IOptions>
     readonly highlight?: IHighlightOptions
   }
 }
 
 declare function markdown(
   markdownString: string,
-  opts?: markdown.IOptions | markdown.IDeprecatedOptions
+  opts?: markdown.IOptions
 ): Promise<string>
 
 export = markdown

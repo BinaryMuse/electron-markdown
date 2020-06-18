@@ -19,17 +19,6 @@ function createProcessor(processorOpts) {
 }
 
 module.exports = async function markdownToHtml(markdown, options = {}) {
-  if (
-    Object.keys(options).length !== 0 &&
-    !options.runBefore &&
-    !options.cmark
-  ) {
-    console.warn(
-      '[electron-markdown] Passing cmark options is moved to options.cmark.'
-    )
-    options.cmark = options
-  }
-
   const defaults = {
     runBefore: [],
     highlight: {
