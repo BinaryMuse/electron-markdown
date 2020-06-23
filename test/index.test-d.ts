@@ -16,6 +16,7 @@ markdown('something', {
 })
 
 markdown('somethings', {
+  runBefore: ['123546'],
   cmark: {
     extensions: {
       autolink: true,

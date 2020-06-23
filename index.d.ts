@@ -4,7 +4,8 @@ declare namespace markdown {
   // @deprecated Passing cmark options is moved to `options.cmark`
   interface IDeprecatedOptions extends Partial<cmark.IOptions> {}
   interface IOptions {
-    cmark: Partial<cmark.IOptions>
+    runBefore?: Array<any>
+    cmark?: Partial<cmark.IOptions>
   }
 }
 

@@ -25,6 +25,8 @@ Promise that resolves to the resulting HTML.
   parsing and rendering succeeds
 - `markdown: String` - a string of Markdown to render to HTML
 - `options: Object`
+  - `runBefore` Array of [remark] plugins - Custom plugins to be run before the
+    commonly used plugins.
   - `cmark` options to pass to
     [cmark-gfm](https://github.com/BinaryMuse/node-cmark-gfm#options); will be
     deeply merged with the default options

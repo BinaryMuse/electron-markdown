@@ -59,6 +59,18 @@ describe('markdownToHtml', () => {
     expect($('pre code.hljs').length).to.eql(1)
   })
 
+  describe('options.runBefore', () => {
+    it('runs custom plugins', async () => {
+      let pluginDidRun = false
+      const plugin = () => (tree) => {
+        pluginDidRun = true
+        return tree
+      }
+      await markdownToHtml(fixtures.basic, { runBefore: [plugin] })
+      expect(pluginDidRun).to.eql(true)
+    })
+  })
+
   describe('options.cmark', () => {
     it('allows additional cmark options', async () => {
       content = await markdownToHtml(fixtures.unsafe)
