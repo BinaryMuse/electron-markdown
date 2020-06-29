@@ -7,11 +7,7 @@ const gemojiToEmoji = require('remark-gemoji-to-emoji')
 const mixin = require('mixin-deep')
 
 function createProcessor(processorOpts) {
-<<<<<<< HEAD
-  const { runBefore } = processorOpts
-=======
-  const { highlight: highlightOpts } = processorOpts
->>>>>>> 43a8702... feat: add ability to pass rehype-highlight options
+  const { highlight: highlightOpts, runBefore } = processorOpts
 
   return rehype()
     .data('settings', { fragment: true })
@@ -35,16 +31,13 @@ module.exports = async function markdownToHtml(markdown, options = {}) {
   }
 
   const defaults = {
-<<<<<<< HEAD
     runBefore: [],
-=======
     highlight: {
       ignoreMissing: true,
       aliases: {
         plaintext: ['text'],
       },
     },
->>>>>>> 43a8702... feat: add ability to pass rehype-highlight options
   }
 
   const cmarkDefaultOpts = {
