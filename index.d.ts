@@ -16,7 +16,7 @@ declare namespace markdown {
   }
   interface IOptions {
     readonly runBefore?: Array<any>
-    readonly cmark: Partial<cmark.IOptions>
+    readonly cmark?: Partial<cmark.IOptions>
     readonly highlight?: IHighlightOptions
   }
 }
