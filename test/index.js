@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
-const { before, describe, it } = require('mocha')
+const chai = require('chai')
+const chaiAsPromiosed = require('chai-as-promised')
+chai.use(chaiAsPromiosed)
 const { expect } = require('chai')
 const cheerio = require('cheerio')
 const markdownToHtml = require('..')
@@ -16,6 +18,10 @@ const fixtures = {
   table: fs.readFileSync(path.join(__dirname, 'fixtures', 'table.md'), 'utf8'),
   tasklist: fs.readFileSync(
     path.join(__dirname, 'fixtures', 'tasklist.md'),
+    'utf8'
+  ),
+  unknownLanguage: fs.readFileSync(
+    path.join(__dirname, 'fixtures/unknown-language.md'),
     'utf8'
   ),
 }
@@ -59,53 +65,74 @@ describe('markdownToHtml', () => {
     expect($('pre code.hljs').length).to.eql(1)
   })
 
-  describe('options.runBefore', () => {
-    it('runs custom plugins', async () => {
-      let pluginDidRun = false
-      const plugin = () => (tree) => {
-        pluginDidRun = true
-        return tree
-      }
-      await markdownToHtml(fixtures.basic, { runBefore: [plugin] })
-      expect(pluginDidRun).to.eql(true)
-    })
-  })
-
-  describe('options.cmark', () => {
-    it('allows additional cmark options', async () => {
-      content = await markdownToHtml(fixtures.unsafe)
-      expect(content).not.to.include('img')
-      content = await markdownToHtml(fixtures.unsafe, {
-        cmark: { unsafe: true },
+  describe('options', () => {
+    describe('.runBefore', () => {
+      it('runs custom plugins', async () => {
+        let pluginDidRun = false
+        const plugin = () => (tree) => {
+          pluginDidRun = true
+          return tree
+        }
+        await markdownToHtml(fixtures.basic, { runBefore: [plugin] })
+        expect(pluginDidRun).to.eql(true)
       })
-      expect(content).to.include('img')
     })
 
-    it('allows removing extensions', async () => {
-      content = await markdownToHtml(fixtures.table)
-      expect(content).to.include('table')
-      content = await markdownToHtml(fixtures.table, {
-        cmark: { extensions: { table: false } },
+    describe('.highlight.ignoreMissing', () => {
+      it('should work be default (default is true)', async () => {
+        const content = await markdownToHtml(fixtures.unknownLanguage)
+        $ = cheerio.load(content)
+        expect(fixtures.unknownLanguage).to.include('```some-unknown-language')
+        expect(
+          $('pre > code.hljs.language-some-unknown-language').length
+        ).to.eq(1)
       })
-      expect(content).not.to.include('table')
-    })
 
-    it('allows adding extensions', async () => {
-      content = await markdownToHtml(fixtures.tasklist)
-      expect(content).not.to.include('checkbox')
-      expect(content).to.include('href')
-      content = await markdownToHtml(fixtures.tasklist, {
-        cmark: { extensions: { tasklist: true, autolink: false } },
+      it('should throw an error when ignoreMissing is false', () => {
+        return expect(
+          markdownToHtml(fixtures.unknownLanguage, {
+            highlight: { ignoreMissing: false },
+          })
+        ).to.be.rejectedWith(/Unknown language: `some-unknown-language`/)
       })
-      expect(content).to.include('checkbox')
-      expect(content).not.to.include('href')
     })
 
-    it('allows use deprecated options object', async () => {
-      content = await markdownToHtml(fixtures.unsafe)
-      expect(content).not.to.include('img')
-      content = await markdownToHtml(fixtures.unsafe, { unsafe: true })
-      expect(content).to.include('img')
+    describe('.cmark', () => {
+      it('allows additional cmark options', async () => {
+        content = await markdownToHtml(fixtures.unsafe)
+        expect(content).not.to.include('img')
+        content = await markdownToHtml(fixtures.unsafe, {
+          cmark: { unsafe: true },
+        })
+        expect(content).to.include('img')
+      })
+
+      it('allows removing extensions', async () => {
+        content = await markdownToHtml(fixtures.table)
+        expect(content).to.include('table')
+        content = await markdownToHtml(fixtures.table, {
+          cmark: { extensions: { table: false } },
+        })
+        expect(content).not.to.include('table')
+      })
+
+      it('allows adding extensions', async () => {
+        content = await markdownToHtml(fixtures.tasklist)
+        expect(content).not.to.include('checkbox')
+        expect(content).to.include('href')
+        content = await markdownToHtml(fixtures.tasklist, {
+          cmark: { extensions: { tasklist: true, autolink: false } },
+        })
+        expect(content).to.include('checkbox')
+        expect(content).not.to.include('href')
+      })
+
+      it('allows use deprecated options object', async () => {
+        content = await markdownToHtml(fixtures.unsafe)
+        expect(content).not.to.include('img')
+        content = await markdownToHtml(fixtures.unsafe, { unsafe: true })
+        expect(content).to.include('img')
+      })
     })
   })
 })

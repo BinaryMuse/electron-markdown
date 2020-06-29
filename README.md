@@ -30,6 +30,9 @@ Promise that resolves to the resulting HTML.
   - `cmark` options to pass to
     [cmark-gfm](https://github.com/BinaryMuse/node-cmark-gfm#options); will be
     deeply merged with the default options
+  - `highlight` - Object of
+    [rehype-highlight](https://github.com/rehypejs/rehype-highlighthighlight#options)
+    options.
 
 Default options:
 
@@ -43,7 +46,13 @@ Default options:
       autolink: true,
       tagfilter: true
     }
-  }
+  },
+  highlight: {
+    ignoreMissing: true,
+    aliases: {
+      plaintext: ['text'],
+    },
+  },
 }
 ```
 

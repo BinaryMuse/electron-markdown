@@ -1,10 +1,10 @@
 import { expectType } from 'tsd'
 import * as markdown from '../index'
-import { pathToFileURL } from 'url'
 
 expectType<Promise<string>>(markdown('something'))
 expectType<string>(await markdown('something'))
 
+// @deprecated
 markdown('something', {
   extensions: {
     autolink: true,
@@ -13,6 +13,12 @@ markdown('something', {
   fullInfoString: true,
   githubPreLang: false,
   unsafe: true,
+  highlight: {
+    ignoreMissing: true,
+    aliases: {
+      plaintext: ['text'],
+    },
+  },
 })
 
 markdown('somethings', {
@@ -25,5 +31,11 @@ markdown('somethings', {
     fullInfoString: true,
     githubPreLang: false,
     unsafe: true,
+  },
+  highlight: {
+    ignoreMissing: true,
+    aliases: {
+      plaintext: ['text'],
+    },
   },
 })
