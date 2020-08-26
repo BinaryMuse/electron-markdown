@@ -126,13 +126,6 @@ describe('markdownToHtml', () => {
         expect(content).to.include('checkbox')
         expect(content).not.to.include('href')
       })
-
-      it('allows use deprecated options object', async () => {
-        content = await markdownToHtml(fixtures.unsafe)
-        expect(content).not.to.include('img')
-        content = await markdownToHtml(fixtures.unsafe, { unsafe: true })
-        expect(content).to.include('img')
-      })
     })
   })
 })
