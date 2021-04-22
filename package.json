@@ -18,7 +18,7 @@
     "cmark-gfm"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">= 12"
   },
   "author": "Michelle Tilley <michelle@michelletilley.net>",
   "license": "MIT",

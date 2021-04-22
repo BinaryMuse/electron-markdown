@@ -7,7 +7,7 @@ resulting HTML.
 
 ## Installation
 
-Supports Node.js v10 or higher.
+Supports Node.js v12 or higher.
 
 ```bash
 npm install electron-markdown
