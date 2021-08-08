@@ -1,10 +1,10 @@
-const cmark = require('cmark-gfm')
-const rehype = require('rehype')
-const autolinkHeadings = require('rehype-autolink-headings')
-const highlight = require('rehype-highlight')
-const slug = require('rehype-slug')
-const gemojiToEmoji = require('remark-gemoji-to-emoji')
-const mixin = require('mixin-deep')
+import cmark from 'cmark-gfm'
+import { rehype } from 'rehype'
+import autolinkHeadings from 'rehype-autolink-headings'
+import highlight from 'rehype-highlight'
+import slug from 'rehype-slug'
+import gemojiToEmoji from 'remark-gemoji-to-emoji'
+import mixin from 'mixin-deep'
 
 function createProcessor(processorOpts) {
   const { highlight: highlightOpts, runBefore } = processorOpts
@@ -18,7 +18,7 @@ function createProcessor(processorOpts) {
     .use(highlight, highlightOpts)
 }
 
-module.exports = async function markdownToHtml(markdown, options = {}) {
+export default async function markdownToHtml(markdown, options = {}) {
   const defaults = {
     runBefore: [],
     highlight: {
@@ -38,12 +38,15 @@ module.exports = async function markdownToHtml(markdown, options = {}) {
       tagfilter: true,
     },
   }
+
   options = Object.assign(defaults, options)
 
   const html = await cmark.renderHtml(
     markdown,
     mixin(cmarkDefaultOpts, options.cmark)
   )
-  const { contents } = await createProcessor(options).process(html)
-  return contents
+
+  const { value } = await createProcessor(options).process(html)
+
+  return value
 }

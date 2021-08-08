@@ -1,27 +1,27 @@
-const fs = require('fs')
-const path = require('path')
-const chai = require('chai')
-const chaiAsPromiosed = require('chai-as-promised')
-chai.use(chaiAsPromiosed)
-const { expect } = require('chai')
-const cheerio = require('cheerio')
-const markdownToHtml = require('..')
+import fs from 'node:fs'
+import path from 'node:path'
+import chai, { expect } from 'chai'
+import chaiAsPromised from 'chai-as-promised'
+import cheerio from 'cheerio'
+import markdownToHtml from '../index.js'
+
+chai.use(chaiAsPromised)
 
 const fixtures = {
-  basic: fs.readFileSync(path.join(__dirname, 'fixtures', 'basic.md'), 'utf8'),
-  emoji: fs.readFileSync(path.join(__dirname, 'fixtures', 'emoji.md'), 'utf8'),
-  code: fs.readFileSync(path.join(__dirname, 'fixtures', 'code.md'), 'utf8'),
+  basic: fs.readFileSync(new URL('fixtures/basic.md', import.meta.url), 'utf8'),
+  emoji: fs.readFileSync(new URL('fixtures/emoji.md', import.meta.url), 'utf8'),
+  code: fs.readFileSync(new URL('fixtures/code.md', import.meta.url), 'utf8'),
   unsafe: fs.readFileSync(
-    path.join(__dirname, 'fixtures', 'unsafe.md'),
+    new URL('fixtures/unsafe.md', import.meta.url),
     'utf8'
   ),
-  table: fs.readFileSync(path.join(__dirname, 'fixtures', 'table.md'), 'utf8'),
+  table: fs.readFileSync(new URL('fixtures/table.md', import.meta.url), 'utf8'),
   tasklist: fs.readFileSync(
-    path.join(__dirname, 'fixtures', 'tasklist.md'),
+    new URL('fixtures/tasklist.md', import.meta.url),
     'utf8'
   ),
   unknownLanguage: fs.readFileSync(
-    path.join(__dirname, 'fixtures/unknown-language.md'),
+    new URL('fixtures/unknown-language.md', import.meta.url),
     'utf8'
   ),
 }
